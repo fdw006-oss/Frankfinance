@@ -152,7 +152,7 @@ Ask anything — Roth IRAs, ETFs, saving strategies, side hustles, or next steps
 if "chat_history" not in st.session_state:
     st.session_state["chat_history"] = []
 
-# Render chat messages inside a card
+# Render chat messages
 with st.container():
     for role, message in st.session_state["chat_history"]:
         if role == "user":
@@ -164,9 +164,39 @@ with st.container():
                 margin: 8px 0;
                 text-align: right;
                 color: #0C4A6E;
+                font-size: 16px;
             ">{message}</div>
             """, unsafe_allow_html=True)
+
         else:
             st.markdown(f"""
+            <div style="
+                background-color: #F3F4F6;
+                padding: 10px 15px;
+                border-radius: 12px;
+                margin: 8px 0;
+                text-align: left;
+                color: #1F2937;
+                font-size: 16px;
+            ">{message}</div>
+            """, unsafe_allow_html=True)
+
+# Chat input field
+with st.form("chat_form", clear_on_submit=True):
+    user_input = st.text_input("Ask a question:", "")
+    send = st.form_submit_button("Send")
+
+if send and user_input:
+    st.session_state["chat_history"].append(("user", user_input))
+
+    # Generate AI reply
+    profile = st.session_state.get("user_profile", {})
+    plan = st.session_state.get("plan_summary", {})
+    reply = ask_coach(profile, plan, st.session_state["chat_history"])
+
+    st.session_state["chat_history"].append(("assistant", reply))
+
+    st.experimental_rerun()
+
 
 
