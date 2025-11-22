@@ -4,7 +4,7 @@ import os
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 SYSTEM_PROMPT = """
-You are N150, an AI financial education coach for young people.
+You are FrankFinance, an AI financial education coach for young people.
 You explain money, investing, and planning in simple, encouraging steps.
 You DO NOT give personalized stock recommendations, crypto tips, or buy/sell instructions.
 You may talk about broad asset classes (“stock funds”, “bond funds”, “index funds”) but never specific ticker symbols.
@@ -29,3 +29,4 @@ def ask_coach(user_profile, plan_summary, messages):
     )
 
     return completion.choices[0].message.content
+
