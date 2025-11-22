@@ -67,7 +67,6 @@ with st.form("user_profile_form"):
 
 
 if submitted:
-    # Map risk string → numeric value
     risk_map = {"Low": 1, "Medium": 2, "High": 3}
     numeric_risk = risk_map[risk]
 
@@ -105,7 +104,6 @@ if "plan_summary" in st.session_state:
 
     st.header("Step 2 — Your Starter Investing Plan")
 
-    # Summary card — pure HTML, safe
     card(f"""
 <h3>📌 Your Personalized Investing Summary</h3>
 <p><b>Emergency Fund Target:</b> ${plan['emergency_fund_target']:,.0f}</p>
@@ -113,7 +111,6 @@ if "plan_summary" in st.session_state:
 <p><b>Projected Value in {plan['years_horizon']} Years:</b> ${plan['future_value_7pct']:,.0f}</p>
 """)
 
-    # Growth card
     card("""
 <h3>📈 Growth Projection</h3>
 <p>Below is how your investment could grow over time at <b>4%</b>, <b>7%</b>, and <b>10%</b> annual returns.</p>
@@ -134,9 +131,8 @@ if "plan_summary" in st.session_state:
         ],
     })
 
-    st.line_chart(df, x="Years")
+    st.line_chart(df.set_index("Years"))
 
-    # Educational notes
     card("""
 <h3>📘 How to Interpret These Projections</h3>
 <ul>
@@ -202,13 +198,25 @@ for role, message in st.session_state["chat_history"]:
         )
 
 
-# Chat input
+# ------------------------------
+#   FIXED CHAT SUBMISSION LOGIC
+# ------------------------------
+
+# 1. Form collects the message — but does NOT call the API yet
 with st.form("chat_form", clear_on_submit=True):
     user_input = st.text_input("Ask a question:")
     send = st.form_submit_button("Send")
 
 if send and user_input:
-    st.session_state["chat_history"].append(("user", user_input))
+    # Store the pending message, then rerun
+    st.session_state["pending_user_message"] = user_input
+    st.rerun()
+
+# 2. On rerun → process the pending message
+if "pending_user_message" in st.session_state:
+    user_msg = st.session_state.pop("pending_user_message")
+
+    st.session_state["chat_history"].append(("user", user_msg))
 
     profile = st.session_state.get("user_profile", {})
     plan = st.session_state.get("plan_summary", {})
@@ -216,4 +224,4 @@ if send and user_input:
     reply = ask_coach(profile, plan, st.session_state["chat_history"])
     st.session_state["chat_history"].append(("assistant", reply))
 
-    st.experimental_rerun()
+    st.rerun()
