@@ -57,17 +57,22 @@ with st.form("user_profile_form"):
     submitted = st.form_submit_button("Create My Plan 🚀")
 
 if submitted:
+    # Convert the risk string to a numeric risk level (1–3)
+    risk_map = {"Low": 1, "Medium": 2, "High": 3}
+    numeric_risk = risk_map[risk]
+
     st.session_state["user_profile"] = {
         "age": age,
         "monthly_income": monthly_income,
         "can_invest": can_invest,
         "years_horizon": years_horizon,
         "risk": risk,
+        "numeric_risk": numeric_risk,
         "goal": goal,
     }
 
     emergency = suggested_emergency_fund(monthly_income)
-    invest_rate = suggested_investing_rate(risk) * monthly_income
+    invest_rate = suggested_investing_rate(numeric_risk) * monthly_income
     projected_value = future_value_monthly(can_invest, 0.07, years_horizon)
 
     st.session_state["plan_summary"] = {
@@ -78,6 +83,7 @@ if submitted:
     }
 
     st.success("Your plan is ready below! 👇")
+
 
 
 # ------------------------------
@@ -197,6 +203,7 @@ if send and user_input:
     st.session_state["chat_history"].append(("assistant", reply))
 
     st.experimental_rerun()
+
 
 
 
