@@ -12,18 +12,21 @@ from ai_client import ask_coach
 # ------------------------------
 #        CARD UI COMPONENT
 # ------------------------------
-def card(content):
-    st.markdown(f"""
-    <div style="
-        background-color: #FFFFFF;
-        border-radius: 14px;
-        padding: 20px 25px;
-        margin-bottom: 20px;
-        box-shadow: 0px 4px 10px rgba(0,0,0,0.07);
-    ">
-        {content}
-    </div>
-    """, unsafe_allow_html=True)
+def card(content: str):
+    st.markdown(
+        f"""
+        <div style="
+            background-color: #FFFFFF;
+            border-radius: 14px;
+            padding: 20px 25px;
+            margin-bottom: 20px;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.07);
+        ">
+            {content}
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 # ------------------------------
@@ -40,7 +43,7 @@ st.write("Learning to invest should be simple. Answer a few questions and I'll b
 st.header("Step 1 — Tell Me About Yourself")
 
 card("""
-### 👋 Welcome!  
+### 👋 Welcome!
 Let’s create a personalized investing plan based on your income, savings, and long-term goals.
 """)
 
@@ -96,13 +99,13 @@ if submitted:
 # ------------------------------
 if "plan_summary" in st.session_state:
     plan = st.session_state["plan_summary"]
-    profile = st.session_state["user_profile"]
 
     st.header("Step 2 — Your Starter Investing Plan")
 
     # ---- Summary Card ----
     card(f"""
-    ### 📌 Your Personalized Investing Summary  
+    ### 📌 Your Personalized Investing Summary
+
     **Emergency Fund Target:** ${plan['emergency_fund_target']:,.0f}  
     **Suggested Monthly Investing Amount:** ${plan['suggested_monthly_invest']:,.0f}  
     **Projected Value in {plan['years_horizon']} Years:** ${plan['future_value_7pct']:,.0f}  
@@ -133,11 +136,11 @@ if "plan_summary" in st.session_state:
 
     # ---- Educational Notes ----
     card("""
-    ### 📘 How to Interpret These Projections  
+    ### 📘 How to Interpret These Projections
     - **4%:** Slow growth, conservative outlook  
     - **7%:** Typical long-term stock market average  
     - **10%:** Strong market performance  
-    <br>
+
     These scenarios help you visualize possible outcomes — the goal is consistency, not timing the market.
     """)
 
@@ -149,7 +152,7 @@ if "plan_summary" in st.session_state:
 st.header("Step 3 — Ask the Investing Coach Anything")
 
 card("""
-### 💬 Chat With Your AI Investing Coach  
+### 💬 Chat With Your AI Investing Coach
 Ask anything — Roth IRAs, ETFs, saving strategies, side hustles, or next steps.
 """)
 
@@ -161,30 +164,41 @@ if "chat_history" not in st.session_state:
 with st.container():
     for role, message in st.session_state["chat_history"]:
         if role == "user":
-            st.markdown(f"""
-            <div style="
-                background-color: #E0F2FE;
-                padding: 10px 15px;
-                border-radius: 12px;
-                margin: 8px 0;
-                text-align: right;
-                color: #0C4A6E;
-                font-size: 16px;
-            ">{message}</div>
-            """, unsafe_allow_html=True)
+            st.markdown(
+                f"""
+                <div style="
+                    background-color: #E0F2FE;
+                    padding: 10px 15px;
+                    border-radius: 12px;
+                    margin: 8px 0;
+                    text-align: right;
+                    color: #0C4A6E;
+                    font-size: 16px;
+                ">
+                    {message}
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
 
         else:
-            st.markdown(f"""
-            <div style="
-                background-color: #F3F4F6;
-                padding: 10px 15px;
-                border-radius: 12px;
-                margin: 8px 0;
-                text-align: left;
-                color: #1F2937;
-                font-size: 16px;
-            ">{message}</div>
-            """, unsafe_allow_html=True)
+            st.markdown(
+                f"""
+                <div style="
+                    background-color: #F3F4F6;
+                    padding: 10px 15px;
+                    border-radius: 12px;
+                    margin: 8px 0;
+                    text-align: left;
+                    color: #1F2937;
+                    font-size: 16px;
+                ">
+                    {message}
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
 
 # Chat input
 with st.form("chat_form", clear_on_submit=True):
@@ -201,6 +215,8 @@ if send and user_input:
     st.session_state["chat_history"].append(("assistant", reply))
 
     st.experimental_rerun()
+
+
 
 
 
