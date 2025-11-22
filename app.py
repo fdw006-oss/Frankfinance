@@ -15,15 +15,15 @@ from ai_client import ask_coach
 def card(content: str):
     st.markdown(
         f"""
-        <div style="
-            background-color: #FFFFFF;
-            border-radius: 14px;
-            padding: 20px 25px;
-            margin-bottom: 20px;
-            box-shadow: 0px 4px 10px rgba(0,0,0,0.07);
-        ">
-            {content}
-        </div>
+<div style="
+    background-color: #FFFFFF;
+    border-radius: 14px;
+    padding: 20px 25px;
+    margin-bottom: 20px;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.07);
+">
+    {content}
+</div>
         """,
         unsafe_allow_html=True,
     )
@@ -215,6 +215,7 @@ if send and user_input:
     st.session_state["chat_history"].append(("assistant", reply))
 
     st.experimental_rerun()
+
 
 
 
