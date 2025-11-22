@@ -1,4 +1,6 @@
 import streamlit as st
+import pandas as pd
+
 from finance_logic import (
     suggested_emergency_fund,
     suggested_investing_rate,
@@ -6,7 +8,10 @@ from finance_logic import (
 )
 from ai_client import ask_coach
 
-# ---- Card UI Component ----
+
+# ------------------------------
+#        CARD UI COMPONENT
+# ------------------------------
 def card(content):
     st.markdown(f"""
     <div style="
@@ -21,18 +26,17 @@ def card(content):
     """, unsafe_allow_html=True)
 
 
+# ------------------------------
+#       PAGE SETTINGS
+# ------------------------------
 st.set_page_config(page_title="FrankFinance – AI Investing Coach")
-
 st.title("💸 FrankFinance – Your First Investing Coach")
 st.write("Learning to invest should be simple. Answer a few questions and I'll build your starter plan.")
 
-# ------------------------------
-#        ONBOARDING FORM
-# ------------------------------
+
 # ------------------------------
 #       STEP 1 — ONBOARDING
 # ------------------------------
-
 st.header("Step 1 — Tell Me About Yourself")
 
 card("""
@@ -56,8 +60,9 @@ with st.form("user_profile_form"):
 
     submitted = st.form_submit_button("Create My Plan 🚀")
 
+
 if submitted:
-    # Convert the risk string to a numeric risk level (1–3)
+    # Convert string risk ("Low", "Medium", "High") to numeric (1–3)
     risk_map = {"Low": 1, "Medium": 2, "High": 3}
     numeric_risk = risk_map[risk]
 
@@ -87,10 +92,7 @@ if submitted:
 
 
 # ------------------------------
-#         SHOW PLAN
-# ------------------------------
-# ------------------------------
-#         SHOW PLAN (CARD UI)
+#       STEP 2 — INVESTING PLAN
 # ------------------------------
 if "plan_summary" in st.session_state:
     plan = st.session_state["plan_summary"]
@@ -129,24 +131,21 @@ if "plan_summary" in st.session_state:
 
     st.line_chart(df, x="Years")
 
-    # ---- Notes Card ----
+    # ---- Educational Notes ----
     card("""
     ### 📘 How to Interpret These Projections  
-    - **4%**: Slow growth, conservative outlook  
-    - **7%**: Typical long-term stock market average  
-    - **10%**: Strong market performance  
+    - **4%:** Slow growth, conservative outlook  
+    - **7%:** Typical long-term stock market average  
+    - **10%:** Strong market performance  
     <br>
     These scenarios help you visualize possible outcomes — the goal is consistency, not timing the market.
     """)
 
 
-# ------------------------------
-#         CHATBOT
-# ------------------------------
+
 # ------------------------------
 #       STEP 3 — AI CHAT
 # ------------------------------
-
 st.header("Step 3 — Ask the Investing Coach Anything")
 
 card("""
@@ -158,7 +157,7 @@ Ask anything — Roth IRAs, ETFs, saving strategies, side hustles, or next steps
 if "chat_history" not in st.session_state:
     st.session_state["chat_history"] = []
 
-# Render chat messages
+# Render message bubbles
 with st.container():
     for role, message in st.session_state["chat_history"]:
         if role == "user":
@@ -187,7 +186,7 @@ with st.container():
             ">{message}</div>
             """, unsafe_allow_html=True)
 
-# Chat input field
+# Chat input
 with st.form("chat_form", clear_on_submit=True):
     user_input = st.text_input("Ask a question:", "")
     send = st.form_submit_button("Send")
@@ -195,14 +194,15 @@ with st.form("chat_form", clear_on_submit=True):
 if send and user_input:
     st.session_state["chat_history"].append(("user", user_input))
 
-    # Generate AI reply
     profile = st.session_state.get("user_profile", {})
     plan = st.session_state.get("plan_summary", {})
-    reply = ask_coach(profile, plan, st.session_state["chat_history"])
 
+    reply = ask_coach(profile, plan, st.session_state["chat_history"])
     st.session_state["chat_history"].append(("assistant", reply))
 
     st.experimental_rerun()
+
+
 
 
 
