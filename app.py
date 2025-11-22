@@ -214,7 +214,8 @@ if send and user_input:
     reply = ask_coach(profile, plan, st.session_state["chat_history"])
     st.session_state["chat_history"].append(("assistant", reply))
 
-    st.experimental_rerun()
+    st.rerun()
+
 
 
 
