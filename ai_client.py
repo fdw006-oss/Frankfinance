@@ -12,20 +12,25 @@ Always be friendly, clear, and supportive.
 """
 
 def ask_coach(user_profile, plan_summary, messages):
-    # Format messages for the OpenAI client
+    # Base system context
     formatted_messages = [
         {"role": "system", "content": SYSTEM_PROMPT},
         {"role": "system", "content": f"User profile: {user_profile}"},
         {"role": "system", "content": f"Plan summary: {plan_summary}"},
     ]
 
-    for msg in messages:
-        formatted_messages.append(msg)
+    # Convert chat history (tuples) into OpenAI format
+    for role, msg in messages:
+        formatted_messages.append({
+            "role": role,
+            "content": msg
+        })
 
+    # Send request to OpenAI
     completion = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=formatted_messages,
-        temperature=0.4
+        temperature=0.4,
     )
 
     return completion.choices[0].message.content
