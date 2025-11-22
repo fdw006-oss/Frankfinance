@@ -6,9 +6,9 @@ from finance_logic import (
 )
 from ai_client import ask_coach
 
-st.set_page_config(page_title="N150 – AI Investing Coach")
+st.set_page_config(page_title="FrankFinance – AI Investing Coach")
 
-st.title("💸 N150 – Your First Investing Coach")
+st.title("💸 FrankFinance – Your First Investing Coach")
 st.write("Learning to invest should be simple. Answer a few questions and I'll build your starter plan.")
 
 # ------------------------------
