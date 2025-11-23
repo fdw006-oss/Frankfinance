@@ -9,6 +9,52 @@ from finance_logic import (
 )
 from ai_client import ask_coach
 
+# ------------------------------
+#       FORCE LIGHT THEME
+# ------------------------------
+
+def force_light_mode():
+    light_mode_css = """
+    <style>
+        /* Force light background everywhere */
+        html, body, [class*="view-container"], .stApp {
+            background-color: white !important;
+            color: black !important;
+        }
+
+        /* Fix white text on white chat bubbles */
+        .stMarkdown, .markdown-text-container, p, span, div {
+            color: black !important;
+        }
+
+        /* Fix chat bubbles explicitly */
+        .bubble-user {
+            background-color: #E0F2FE !important;
+            color: #0C4A6E !important;
+        }
+
+        .bubble-assistant {
+            background-color: #F3F4F6 !important;
+            color: #1F2937 !important;
+        }
+
+        /* Fix all Streamlit cards/containers */
+        .element-container, .stContainer, .stCard {
+            background-color: white !important;
+            color: black !important;
+        }
+
+        /* Fix input labels */
+        label, textarea, input, select {
+            color: black !important;
+        }
+    </style>
+    """
+    st.markdown(light_mode_css, unsafe_allow_html=True)
+
+force_light_mode()
+
+
 
 # ------------------------------
 #        HELPER FUNCTIONS
@@ -433,3 +479,4 @@ if "pending_user_message" in st.session_state:
     st.session_state["chat_history"].append(("assistant", reply))
 
     st.rerun()
+
