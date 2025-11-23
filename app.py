@@ -9,59 +9,73 @@ from finance_logic import (
 )
 from ai_client import ask_coach
 
-# ------------------------------
-#       FORCE FULL LIGHT MODE
-# ------------------------------
-
 def force_light_mode():
     css = """
     <style>
-        /* Force full app background to light */
+        /* Global light background + black text */
         html, body, .stApp {
             background-color: white !important;
             color: black !important;
         }
 
         /* Make all text black */
-        *, p, span, div {
+        *, p, span, div, label {
             color: black !important;
         }
 
-        /* Chat bubble fixes */
+        /* --- CHAT BUBBLES --- */
         .bubble-user {
             background-color: #E0F2FE !important;
             color: #0C4A6E !important;
         }
-
         .bubble-assistant {
             background-color: #F3F4F6 !important;
             color: #1F2937 !important;
         }
 
-        /* Make Streamlit input boxes light */
-        input, textarea, select, .stTextInput input, .stNumberInput input {
+        /* --- INPUT FIELDS (text, number inputs, text areas) --- */
+        input, textarea, select,
+        .stTextInput input,
+        .stNumberInput input,
+        .stSelectbox div[data-baseweb="select"] > div {
             background-color: white !important;
             color: black !important;
             border: 1px solid #d0d0d0 !important;
         }
 
-        /* Make dropdown options readable */
+        /* Dropdown options */
         div[role="listbox"] div {
             background-color: white !important;
             color: black !important;
         }
 
-        /* Fix the form labels */
-        label, .stSelectbox label, .stTextInput label, .stNumberInput label {
+        /* --- BUTTONS --- */
+        button, .stButton > button {
+            background-color: #2563eb !important;   /* blue */
+            color: white !important;                /* white text */
+            border: none !important;
+            border-radius: 8px !important;
+            padding: 8px 16px !important;
+        }
+
+        /* Fix hover state */
+        button:hover, .stButton > button:hover {
+            background-color: #1e4fbb !important;
+            color: white !important;
+        }
+
+        /* Fix the form submit buttons ("Create My Plan", "Send") */
+        .stForm button {
+            background-color: #2563eb !important;
+            color: white !important;
+        }
+
+        /* Selectbox label */
+        .stSelectbox label {
             color: black !important;
         }
 
-        /* Fix Streamlit cards/containers */
-        .element-container, .stContainer, .stCard {
-            background-color: white !important;
-        }
-
-        /* Remove dark mode shading */
+        /* Remove dark-mode accents */
         [data-testid="stDecoration"] {
             display: none !important;
         }
@@ -70,6 +84,7 @@ def force_light_mode():
     st.markdown(css, unsafe_allow_html=True)
 
 force_light_mode()
+
 
 
 
@@ -497,5 +512,6 @@ if "pending_user_message" in st.session_state:
     st.session_state["chat_history"].append(("assistant", reply))
 
     st.rerun()
+
 
 
