@@ -120,18 +120,18 @@ ${future_value_monthly(profile['can_invest'], 0.07, plan['years_horizon']):,.0f}
 
     years = list(range(0, plan["years_horizon"] + 1))
 
-   df = pd.DataFrame({
-    "Years": years,
-    "4% Return (Conservative)": [
-        future_value_monthly(profile["can_invest"], 0.04, y) for y in years
-    ],
-    "7% Return (Typical Market)": [
-        future_value_monthly(profile["can_invest"], 0.07, y) for y in years
-    ],
-    "10% Return (Optimistic)": [
-        future_value_monthly(profile["can_invest"], 0.10, y) for y in years
-    ],
-})
+    df = pd.DataFrame({
+        "Years": years,
+        "4% Return (Conservative)": [
+            future_value_monthly(profile["can_invest"], 0.04, y) for y in years
+        ],
+        "7% Return (Typical Market)": [
+            future_value_monthly(profile["can_invest"], 0.07, y) for y in years
+        ],
+        "10% Return (Optimistic)": [
+            future_value_monthly(profile["can_invest"], 0.10, y) for y in years
+        ],
+    })
 
 
     st.line_chart(df.set_index("Years"))
@@ -228,4 +228,5 @@ if "pending_user_message" in st.session_state:
     st.session_state["chat_history"].append(("assistant", reply))
 
     st.rerun()
+
 
